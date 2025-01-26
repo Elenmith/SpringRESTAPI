@@ -2,6 +2,7 @@ package net.java.crm_backend.service.impl;
 
 import net.java.crm_backend.dto.EmployeeDto;
 import net.java.crm_backend.entity.Employee;
+import net.java.crm_backend.exception.ResourceNotFoundException;
 import net.java.crm_backend.mapper.EmployeeMapper;
 import net.java.crm_backend.repository.EmployeeRepository;
 import net.java.crm_backend.service.EmployeeService;
@@ -28,5 +29,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-
+    @Override
+    public EmployeeDto getEmployeeById(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException("Employee is not exists with given id: " + employeeId));
+        return EmployeeMapper.mapToEmployeeDto(employee);
+    }
 }
